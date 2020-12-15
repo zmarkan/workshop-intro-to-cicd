@@ -23,6 +23,22 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results
+  
+  vulnerability-scan:
+    docker:
+      - image: shiftleft/sast-scan
+    
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Perform Scan
+          command: |
+            scan --build
+      - store_artifacts:
+          path: reports
+          destination: sast-scan-reports
+
 
   deploy-docker:
     docker:
@@ -43,6 +59,8 @@ workflows:
   cicd-demo:
     jobs:
       - build-and-test
+      - vulnerability-scan
       - deploy-docker:
           requires:
             - build-and-test
+            - vulnerability-scan
