@@ -43,6 +43,6 @@ workflows:
   cicd-demo:
     jobs:
       - build-and-test
-      - deploy_docker:
+      - deploy-docker:
           requires:
             - build-and-test
